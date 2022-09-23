@@ -1,7 +1,9 @@
 const Discord = require('discord.js');
 const client = new Discord.Client(); 
-const { ActivityType } = require("discord.js");
-let { readdirSync} = require('fs');
+const {ActivityType} = require("discord.js");
+let {readdirSync} = require('fs');
+
+const clientId = 381693088759939072;
 
 client.config = require('./config.js');
 client.comandos = new Discord.Collection();
@@ -34,4 +36,19 @@ client.login(client.config.token)
 	.catch((err) => {
 		console.error("Error al iniciar sesión: " + err);
 		
+	});
+
+	(async () => {
+		try {
+			console.log(`Started refreshing ${commands.length} application (/) commands.`);
+	
+			const data = await rest.put(
+				Routes.applicationGuildCommands(clientId),
+				{ body: commands },
+			);
+	
+			console.log(`Successfully reloaded ${data.length} application (/) commands.`);
+		} catch (error) {
+			console.error(error);
+		}
 	});
