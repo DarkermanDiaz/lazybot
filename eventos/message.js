@@ -1,5 +1,6 @@
-module.exports = (client, message) => { 
-	if (!message.content.startsWith(client.config.prefix)) return;
+const Discord = require("discord.js");
+module.exports = (client,message) => { 
+	if (message.author.bot || !message.content.startsWith(client.config.prefix)) return;
 
 	const args = message.content.slice(client.config.prefix.length).trim().split(/ +/g); 
 	const command = args.shift().toLowerCase() 
@@ -8,5 +9,6 @@ module.exports = (client, message) => {
 	if (!cmd) return; 
 
 	cmd(client, message, args);
+    message.ejecutoComando = true;
 	
 }
