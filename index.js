@@ -1,38 +1,51 @@
-const Discord = require('discord.js');
-const client = new Discord.Client(); 
-const {ActivityType} = require("discord.js");
-let {readdirSync} = require('fs');
+const fs = require('node:fs');
+const path = require('node:path');
+const { Client, Collection, GatewayIntentBits } = require('discord.js');
+const { token } = require('./config.json');
 
-client.config = require('./config.js');
-client.comandos = new Discord.Collection();
+const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
+client.commands = new Collection();
+const commandsPath = path.join(__dirname, 'commands');
+const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
 
-for (const file of readdirSync('./comandos/')) //bucle para leer los archivos de la carpeta comandos
-{ 
-	if (!file.endsWith(".js")) return;//Si el archivo no es un .js corta el proceso
-	let fileName = file.substring(0, file.length - 3);
-
-	let fileContents = require(`./comandos/${file}`);
-	client.comandos.set(fileName, fileContents);//Lee y ejecuta los comandos de la carpeta comandos
+for (const file of commandFiles) {
+	const filePath = path.join(commandsPath, file);
+	const command = require(filePath);
+	client.commands.set(command.data.name, command);
 }
 
-for (const file of readdirSync('./eventos/')) //Bucle para leer los archivos de la carpeta eventos
-{ 
-	if (!file.endsWith(".js")) return; //Si el archivo no es un .js corta el proceso
-	let fileName = file.substring(0, file.length - 3);//borra el .js del nombre 
+client.once('ready', () => {
+	client.user.setPresence({ activities: [{ name: 'Lazycoders.io' }] });	
+	console.log('Ready!');
+});
 
-	let fileContents = require(`./eventos/${file}`);
+client.on('interactionCreate', async interaction => {
+	if (!interaction.isChatInputCommand()) return;
 
-	client.on(fileName, fileContents.bind(null, client));
-	delete require.cache[require.resolve(`./eventos/${file}`)];
+	const command = client.commands.get(interaction.commandName);
+
+	if (!command) return;
+
+	try {
+		await command.execute(interaction);
+	} catch (error) {
+		console.error(error);
+		await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
+	}
+});
+
+const eventsPath = path.join(__dirname, 'events');
+const eventFiles = fs.readdirSync(eventsPath).filter(file => file.endsWith('.js'));
+
+for (const file of eventFiles) {
+	const filePath = path.join(eventsPath, file);
+	const event = require(filePath);
+	if (event.once) {
+		client.once(event.name, (...args) => event.execute(...args));
+	} else {
+		client.on(event.name, (...args) => event.execute(...args));
+	}
 }
 
-client.login(client.config.token) //Proceso de inicio de sesion del bot
-	.then(() => { 
-		console.log(`Estoy listo, soy ${client.user.tag}`);
-
-	})
-	.catch((err) => {
-		console.error("Error al iniciar sesión: " + err);
-		
-	});
+client.login(token);
