@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder,EmbedBuilder } = require('discord.js');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -7,7 +7,7 @@ module.exports = {
   async execute(interaction)
   {
     const embed = new EmbedBuilder()
-        .setDescription(`${interaction.user}` + " did the ora ora")
+        .setDescription(`${interaction.user}` + " did the muda muda")
         .setColor(3447003)
         .setImage("https://media.tenor.com/images/1f2375abdff4d5624d56a7141a47272e/tenor.gif");
 
