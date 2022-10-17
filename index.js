@@ -15,10 +15,13 @@ for (const file of commandFiles) {
 	client.commands.set(command.data.name, command);
 }
 
-client.once('ready', () => {
-	client.user.setPresence({ activities: [{ name: 'Lazycoders.io' }] });	
-	console.log('Ready!');
-});
+client.on('ready',() =>
+{
+	client.user.setPresence({ activities: [{ name:'Lazycoders.io'}] });	
+}
+)
+
+client.once('ready', () => {console.log('Ready!');});
 
 client.on('interactionCreate', async interaction => {
 	if (!interaction.isChatInputCommand()) return;
@@ -48,4 +51,4 @@ for (const file of eventFiles) {
 	}
 }
 
-client.login(token);
+client.login(process.env.TOKEN);
