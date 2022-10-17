@@ -12,5 +12,9 @@
     "discord.js": "^14.5.0",
     "dotenv": "^16.0.3",
     "fs.js": "^0.0.1"
-  }
+  },
+  "keywords": [
+    "heroku",
+    "discord.js"
+  ]
 }
