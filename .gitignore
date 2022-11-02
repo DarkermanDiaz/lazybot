@@ -1,18 +1,6 @@
-/comandos/template.js
-
-/nodemodules
-
-.DS_Store
-.cache
-.project
-.settings
-.tmproj
-nbproject
-Thumbs.db
-
-/.vscode
+.vscode
 config.json
-run.bat
+deploy-commands.js
 
 # Numerous always-ignore extensions
 *.diff
@@ -36,7 +24,7 @@ nbproject
 Thumbs.db
 
 # Node modules
-/node_modules
+node_modules
 
 # Coveralls
 coverage
@@ -90,4 +78,4 @@ jspm_packages
 .yarn-integrity
 
 # Heroku Env
-.env
+.envnode_modules/
