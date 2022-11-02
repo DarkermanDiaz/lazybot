@@ -1,5 +1,6 @@
 .vscode
 config.json
+deploy-commands.js
 
 # Numerous always-ignore extensions
 *.diff
