@@ -30,10 +30,10 @@ module.exports = {
                 const answer = rpts[Math.floor(Math.random() * rpts.length)];
                 var col = 0;
 
-                    if(answer ="Red"){col = 16711680};
-                    if(answer ="Blue"){col = 3447003};
-                    if(answer ="Green"){col = 5763719};
-                    if(answer ="Yellow"){col = 16776960};
+                    if(answer =="Red"){col = 16711680};
+                    if(answer =="Blue"){col = 3447003};
+                    if(answer =="Green"){col = 5763719};
+                    if(answer =="Yellow"){col = 16776960};
 
                 const embed = {
                     title:'Pick the '+answer+' button',
