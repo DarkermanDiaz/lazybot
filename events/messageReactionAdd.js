@@ -29,10 +29,10 @@ module.exports = {
                   ];
                 const answer = rpts[Math.floor(Math.random() * rpts.length)];
                 switch(answer){
-                    case("Red"):{col = 0xff0000}
-                    case("Blue"):{col = 0x0800ff}
-                    case("Green"):{col = 0x04ff00}
-                    case("Yellow"):{col = 0xffdd00}
+                    case("Red"):{col = 15548997}
+                    case("Blue"):{col = 3447003}
+                    case("Green"):{col = 5763719}
+                    case("Yellow"):{col = 16776960}
                 }
                 const embed = {
                     title:'Pick the '+answer+' button',
