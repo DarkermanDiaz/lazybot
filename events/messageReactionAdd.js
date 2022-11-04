@@ -1,26 +1,163 @@
-const { MessageReaction } = require("discord.js");
+const { Event, InteractionCollector, ComponentType } = require('discord.js');
 
 module.exports = {
-    name: 'MessageReactionAdd',
-    execute (interaction) {
-        client.on('messageReactionAdd', (reaction, user) => {
-            // Verificamos que la reaccion sea en un servidor
-            if (!reaction.message.channel.guild) return;
-            // Verificamos que la reaccion solo sea de miembros y no por bots
-            if (user.bot) return;
-            // Obtenemos los datos del mensaje donde se agrego la reacción
-            let message = reaction.message;
-            // Obtener los datos del servidor donde se hiso la reacción
-            let guild = message.guild;
-            // Obtenemos los datos del canal donde se hiso la reacción
-            let channel = message.channel;
-            // Obtenemos el nombre del emoji de la reacción
-            let emoji = reaction.emoji.name
-           
-            // Enviamos un mensaje de información de la reacción agregada en un canal X 
-            console.log(`El usuario **${user.username}** reacciono con el emoji ${emoji} al mensaje **${message.content}** enviado en el canal <#${channel.id}> del servidor **${guild.name}**.`)
-           
-           })
-           
+    name:'messageReactionAdd',
+    
+    async execute(reaction, user) {
+        // When a reaction is received, check if the structure is partial
+        if (reaction.partial) {
+            // If the message this reaction belongs to was removed, the fetching might result in an API error which should be handled
+            try {
+                await reaction.fetch();
+            } catch (error) {
+                console.error('Something went wrong when fetching the message:', error);
+                // Return as `reaction.message.author` may be undefined/null
+                return;
+            }
+        }
+        let memberRole = reaction.message.guild.roles.cache.find(role => role.name === "Member");
+
+        if (reaction.message == '1037984277339578409' && reaction.emoji.name == '✅'){//Verifica si se reacciono al mensaje correcto con la reaccion correcta
+            let member = reaction.message.guild.members.cache.get(user.id);
+            if (!member.roles.cache.has(memberRole.id)){
+                console.log("no member role")
+                var rpts = [
+                    "Red",
+                    "Blue",
+                    "Yellow",
+                    "Green",
+                  ];
+                const answer = rpts[Math.floor(Math.random() * rpts.length)];
+                switch(answer){
+                    case("Red"):{col = 0xff0000}
+                    case("Blue"):{col = 0x0800ff}
+                    case("Green"):{col = 0x04ff00}
+                    case("Yellow"):{col = 0xffdd00}
+                }
+                const embed = {
+                    title:'Pick the '+answer+' button',
+                    color:col
+                };
+                const embver = {
+                    title:'Verified!',
+                    color:col
+                };
+                const embwrg = {
+                    title : 'Wrong answer!',
+                    color:col
+                };
+                const contents = 
+                    {
+                        "type": 1,
+                        "components": [
+                        {
+                            "style": 1,
+                            "custom_id": `Red`,
+                            "disabled": false,
+                            "emoji": {
+                            "id": null,
+                            "name": `🔴`
+                            },
+                            "type": 2
+                        },
+                        {
+                            "style": 1,
+                            "custom_id": `Yellow`,
+                            "disabled": false,
+                            "emoji": {
+                            "id": null,
+                            "name": `🟡`
+                            },
+                            "type": 2
+                        },
+                        {
+                            "style": 1,
+                            "custom_id": `Blue`,
+                            "disabled": false,
+                            "emoji": {
+                            "id": null,
+                            "name": `🔵`
+                            },
+                            "type": 2
+                        },
+                        {
+                            "style": 1,
+                            "custom_id": `Green`,
+                            "disabled": false,
+                            "emoji": {
+                            "id": null,
+                            "name": `🟢`
+                            },
+                            "type": 2
+                        }
+                        ]
+                    };
+                const dcontents =  
+                {
+                    "type": 1,
+                    "components": [
+                    {
+                        "style": 1,
+                        "custom_id": `Red`,
+                        "disabled": true,
+                        "emoji": {
+                        "id": null,
+                        "name": `🔴`
+                        },
+                        "type": 2
+                    },
+                    {
+                        "style": 1,
+                        "custom_id": `Yellow`,
+                        "disabled": true,
+                        "emoji": {
+                        "id": null,
+                        "name": `🟡`
+                        },
+                        "type": 2
+                    },
+                    {
+                        "style": 1,
+                        "custom_id": `Blue`,
+                        "disabled": true,
+                        "emoji": {
+                        "id": null,
+                        "name": `🔵`
+                        },
+                        "type": 2
+                    },
+                    {
+                        "style": 1,
+                        "custom_id": `Green`,
+                        "disabled": true,
+                        "emoji": {
+                        "id": null,
+                        "name": `🟢`
+                        },
+                        "type": 2
+                    }
+                    ]
+                };
+                const msg = await user.send({ embeds: [embed], components:[contents], ephemeral:true });
+
+                const collector = msg.createMessageComponentCollector({ time: 15000 });
+
+                collector.on('collect', i => {
+                    if (i.customId === answer) {
+                        member.roles.add(memberRole)
+                        msg.edit({ embeds: [embver],components:[dcontents]});
+                    }
+                    else
+                    {
+                        msg.edit({ embeds: [embwrg],components:[dcontents]});
+                    }
+                    i.deferUpdate()
+                });
+                
+                collector.on('end', i => {
+                    msg.edit({ embeds: [embed],components:[dcontents]})
+                    })
+            }
+        }
     }
 }
