@@ -1,7 +1,7 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const { Client, Collection, GatewayIntentBits } = require('discord.js');
-//const { token } = require('./config.json');
+//const { token } = require('../config.json');
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
@@ -15,13 +15,7 @@ for (const file of commandFiles) {
 	client.commands.set(command.data.name, command);
 }
 
-client.on('ready',() =>
-{
-	client.user.setPresence({ activities: [{ name:'Lazycoders.io'}] });	
-}
-)
-
-client.once('ready', () => {console.log('Ready!');});
+client.once('ready', () => {console.log('Ready!');client.user.setPresence({ activities: [{ name:'Lazycoders.io'}] })});
 
 client.on('interactionCreate', async interaction => {
 	if (!interaction.isChatInputCommand()) return;
