@@ -25,18 +25,19 @@ module.exports = {
                     "Red",
                     "Blue",
                     "Yellow",
-                    "Green",
+                    "Green"
                   ];
                 const answer = rpts[Math.floor(Math.random() * rpts.length)];
-                switch(answer){
-                    case("Red"):{col = 15548997}
-                    case("Blue"):{col = 3447003}
-                    case("Green"):{col = 5763719}
-                    case("Yellow"):{col = 16776960}
-                }
+                var col = 0;
+
+                    if(answer ="Red"){col = 16711680};
+                    if(answer ="Blue"){col = 3447003};
+                    if(answer ="Green"){col = 5763719};
+                    if(answer ="Yellow"){col = 16776960};
+
                 const embed = {
                     title:'Pick the '+answer+' button',
-                    color:col
+                    color: col
                 };
                 const embver = {
                     title:'Verified!',
