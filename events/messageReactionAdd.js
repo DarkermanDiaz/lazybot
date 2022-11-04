@@ -31,8 +31,8 @@ module.exports = {
                 var col = 0;
 
                     if(answer =="Red"){col = 16711680};
-                    if(answer =="Blue"){col = 3447003};
-                    if(answer =="Green"){col = 5763719};
+                    if(answer =="Blue"){col = 2123412};
+                    if(answer =="Green"){col = 2067276};
                     if(answer =="Yellow"){col = 16776960};
 
                 const embed = {
