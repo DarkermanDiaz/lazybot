@@ -67,4 +67,4 @@ client.on(Events.MessageReactionAdd, async (reaction, user) => {
 	console.log(`${reaction.count} user(s) have given the same reaction to this message!`);
 });
 
-client.login(process.env.token);
+client.login(process.env.TOKEN);
